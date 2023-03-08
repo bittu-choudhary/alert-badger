@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_08_212756) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_08_212911) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pgcrypto"
@@ -52,6 +52,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_08_212756) do
     t.index ["client_id"], name: "index_projects_on_client_id"
   end
 
+  create_table "slack_integrations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "client_id", null: false
+    t.string "workspace_name"
+    t.string "api_token", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["client_id"], name: "index_slack_integrations_on_client_id"
+  end
+
   create_table "user_login_change_keys", id: :uuid, default: nil, force: :cascade do |t|
     t.string "key", null: false
     t.string "login", null: false
@@ -80,6 +89,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_08_212756) do
   add_foreign_key "alert_details", "projects"
   add_foreign_key "clients", "users"
   add_foreign_key "projects", "clients"
+  add_foreign_key "slack_integrations", "clients"
   add_foreign_key "user_login_change_keys", "users", column: "id"
   add_foreign_key "user_password_reset_keys", "users", column: "id"
   add_foreign_key "user_verification_keys", "users", column: "id"
