@@ -6,6 +6,10 @@ class CreateRodauth < ActiveRecord::Migration[7.0]
       t.integer :status, null: false, default: 1
       t.citext :email, null: false
       t.index :email, unique: true, where: "status IN (1, 2)"
+      t.string :first_name, null: false
+      t.string :last_name
+      t.boolean :is_admin, default: false
+
       t.string :password_hash
     end
 

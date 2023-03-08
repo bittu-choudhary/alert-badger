@@ -113,6 +113,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_08_213431) do
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.integer "status", default: 1, null: false
     t.citext "email", null: false
+    t.string "first_name", null: false
+    t.string "last_name"
+    t.boolean "is_admin", default: false
     t.string "password_hash"
     t.index ["email"], name: "index_users_on_email", unique: true, where: "(status = ANY (ARRAY[1, 2]))"
   end
