@@ -14,6 +14,23 @@
 #
 # See https://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|
+
+  config.before(:each) do
+    stub_request(:post, /api.slack.com/).
+      with(headers: {'Accept'=>'*/*', 'User-Agent'=>'Ruby'}).
+      to_return(status: 200, body: "stubbed response", headers: {})
+  end
+
+  config.before(:each) do
+    admin = User.create!(email: "admin@example.com", password: "admin123", first_name: "Admin", is_admin: true)
+    user = User.create!(email: "user@example.com", password: "secret123", first_name: "Bob", is_admin: false)
+    client = Client.create!(name: "Company X", user: user)
+    project = Project.create!(title: "Project X", client: client, secret_token: "123secret")
+    slack_config = SlackIntegration.create!(client: client, workspace_name: "test slack", api_token: "api-token")
+    notification_type = NotificationType.create!(name: "SpamNotification", description: "Spam notifications")
+    slack_receivers = SlackNotificationReceiver.create!(project: project, notification_type: notification_type, slack_integration: slack_config, channel_name: "#testing-honeybadger")
+  end
+  
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
   # assertions if you prefer.
