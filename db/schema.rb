@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_08_212911) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_08_213217) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pgcrypto"
@@ -61,6 +61,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_08_212911) do
     t.index ["client_id"], name: "index_slack_integrations_on_client_id"
   end
 
+  create_table "slack_notification_receivers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "project_id", null: false
+    t.string "channel_name", null: false
+    t.uuid "notification_type_id", null: false
+    t.uuid "slack_integration_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["notification_type_id"], name: "index_slack_notification_receivers_on_notification_type_id"
+    t.index ["project_id"], name: "index_slack_notification_receivers_on_project_id"
+    t.index ["slack_integration_id"], name: "index_slack_notification_receivers_on_slack_integration_id"
+  end
+
   create_table "user_login_change_keys", id: :uuid, default: nil, force: :cascade do |t|
     t.string "key", null: false
     t.string "login", null: false
@@ -90,6 +102,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_08_212911) do
   add_foreign_key "clients", "users"
   add_foreign_key "projects", "clients"
   add_foreign_key "slack_integrations", "clients"
+  add_foreign_key "slack_notification_receivers", "notification_types"
+  add_foreign_key "slack_notification_receivers", "projects"
+  add_foreign_key "slack_notification_receivers", "slack_integrations"
   add_foreign_key "user_login_change_keys", "users", column: "id"
   add_foreign_key "user_password_reset_keys", "users", column: "id"
   add_foreign_key "user_verification_keys", "users", column: "id"
