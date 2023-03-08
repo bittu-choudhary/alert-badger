@@ -7,6 +7,7 @@ class CreateNotificationDetails < ActiveRecord::Migration[7.0]
       t.string :message
       t.belongs_to :notification_type, null: false, foreign_key: true, type: :uuid
       t.jsonb :payload
+      t.belongs_to :alert_detail, null: false, foreign_key: true, type: :uuid
 
       t.timestamps
     end

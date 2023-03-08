@@ -45,8 +45,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_08_213431) do
     t.string "message"
     t.uuid "notification_type_id", null: false
     t.jsonb "payload"
+    t.uuid "alert_detail_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["alert_detail_id"], name: "index_notification_details_on_alert_detail_id"
     t.index ["notification_type_id"], name: "index_notification_details_on_notification_type_id"
     t.index ["project_id"], name: "index_notification_details_on_project_id"
     t.index ["receiver_type", "receiver_id"], name: "index_notification_details_on_receiver"
@@ -117,6 +119,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_08_213431) do
 
   add_foreign_key "alert_details", "projects"
   add_foreign_key "clients", "users"
+  add_foreign_key "notification_details", "alert_details"
   add_foreign_key "notification_details", "notification_types"
   add_foreign_key "notification_details", "projects"
   add_foreign_key "projects", "clients"
