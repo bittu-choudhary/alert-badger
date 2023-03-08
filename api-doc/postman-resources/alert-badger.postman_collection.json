@@ -1,0 +1,97 @@
+{
+	"info": {
+		"_postman_id": "ff5bcf1e-95da-4f3a-9926-37631d4f75e5",
+		"name": "alert-badger",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Spam payload resulting in slack alert",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "123secret",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "Project X",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"RecordType\": \"Bounce\",\n  \"Type\": \"SpamNotification\",\n  \"TypeCode\": 512,\n  \"Name\": \"Spam notification\",\n  \"Tag\": \"\",\n  \"MessageStream\": \"outbound\",\n  \"Description\": \"The message was delivered, but was either blocked by the user, or classified as spam, bulk mail, or had rejected content.\",\n  \"Email\": \"zaphod@example.com\",\n  \"From\": \"notifications@honeybadger.io\",\n  \"BouncedAt\": \"2023-02-27T21:41:30Z\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{protocol}}://{{host}}/api/v1/alerts",
+					"protocol": "{{protocol}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"alerts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Other payload not resulting in slack alert Copy",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "123secret",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "Project X",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"RecordType\": \"Bounce\",\n  \"MessageStream\": \"outbound\",\n  \"Type\": \"HardBounce\",\n  \"TypeCode\": 1,\n  \"Name\": \"Hard bounce\",\n  \"Tag\": \"Test\",\n  \"Description\": \"The server was unable to deliver your message (ex: unknown user, mailbox not found).\",\n  \"Email\": \"arthur@example.com\",\n  \"From\": \"notifications@honeybadger.io\",\n  \"BouncedAt\": \"2019-11-05T16:33:54.9070259Z\",\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{protocol}}://{{host}}/api/v1/alerts",
+					"protocol": "{{protocol}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"alerts"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

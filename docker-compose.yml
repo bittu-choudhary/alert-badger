@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  postgres:
+    container_name: ad_postgres
+    image: postgres
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+  alert_badger:
+    # Nokogori dependency issue with m1 - https://stackoverflow.com/a/71787531
+    platform: linux/x86_64
+    build: .
+    image: alert_badger
+    container_name: alert_badger
+    environment:
+      RAILS_ROOT:         /alert-badger
+      RAILS_MASTER_KEY: '6a4cf01aa260b41e7ef710794e09ae88'
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+
+volumes:
+  postgres:
+    driver: local
