@@ -1,6 +1,19 @@
 class Api::V1::AlertsController < ApplicationController
     before_action :verify_request, only: %i[ create ]
 
+    def create
+        alert = AlertDetail.create(
+            project: @project,
+            name: alert_params["Name"],
+            alert_type: alert_params["Type"],
+            description: alert_params["Description"],
+            from: alert_params["From"],
+            payload: JSON.parse(alert_params.to_json))
+        alert_handler = AlertHandlerService.new(alert)
+        alert_handler.inspect
+        render json: {status: "success"}, status: :created
+    end
+
     private
 
     def verify_request
