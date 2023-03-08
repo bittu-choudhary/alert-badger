@@ -13,6 +13,9 @@
 # it.
 #
 # See https://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
+
+require 'webmock/rspec'
+
 RSpec.configure do |config|
 
   config.before(:each) do
@@ -30,7 +33,7 @@ RSpec.configure do |config|
     notification_type = NotificationType.create!(name: "SpamNotification", description: "Spam notifications")
     slack_receivers = SlackNotificationReceiver.create!(project: project, notification_type: notification_type, slack_integration: slack_config, channel_name: "#testing-honeybadger")
   end
-  
+
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
   # assertions if you prefer.
